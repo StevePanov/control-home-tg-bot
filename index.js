@@ -7,7 +7,7 @@ var app = express();
 
 var chatsId = [];
 
-var hall = 0; //данные датчика Холла
+var hall = 1; //данные датчика Холла
 var infrared = 0; //данные ИК датчика
 
 var history = {
@@ -25,18 +25,21 @@ var history = {
 bot.onText(
   /\/start/,
   (onText = msg => {
-    chatsId = Array.from(new Set([...chatsId, msg.chat.id]));
-    chatsId.map(id => {
-      bot.sendMessage(id, "Ты подписался на уведомления");
-    });
-    console.log("chatsId> ", chatsId);
+    console.log("/start пришло сообщение, chatsId: ", chatsId);
+    if (chatsId.indexOf(msg.chat.id) != -1) {
+      bot.sendMessage(msg.chat.id, "Вы уже подписаны");
+    } else {
+      chatsId = Array.from(new Set([...chatsId, msg.chat.id]));
+      bot.sendMessage(msg.chat.id, "Вы подписались на уведомления");
+    }
   })
 );
 
 bot.onText(
   /\/door/,
   (onText = msg => {
-    if (req.headers.hall === 1) {
+    console.log("/door  пришло сообщение, hall: ", hall);
+    if (hall === 0) {
       chatsId.map(id => {
         bot.sendMessage(id, "Дверь открыта");
       });
@@ -50,7 +53,8 @@ bot.onText(
 bot.onText(
   /\/space/,
   (onText = msg => {
-    if (req.headers.infrared === 1) {
+    console.log("/space  пришло сообщение, infrared: ", infrared);
+    if (infrared === 1) {
       chatsId.map(id => {
         bot.sendMessage(id, "В зоне датчика движение");
       });
@@ -78,10 +82,10 @@ bot.onText(
 );
 
 app.get("/hall", (req, res) => {
-  // console.log("Hall:>>>>>>  ", req.headers.hall);
+  console.log("Запрос /hall, req.headers.hall: ", req.headers.hall);
 
   if (hall != req.headers.hall) {
-    if (req.headers.hall == 1) {
+    if (req.headers.hall == 0) {
       chatsId.map(id => {
         bot.sendMessage(id, "Дверь открыта");
       });
@@ -99,7 +103,8 @@ app.get("/hall", (req, res) => {
 });
 
 app.get("/infrared", (req, res) => {
-  // console.log("IK:>>>>>>  ", req.headers.infrared);
+  console.log("Запрос /infrared, req.headers.infrared: ", req.headers.infrared);
+
   if (infrared != req.headers.infrared) {
     if (req.headers.infrared == 1) {
       chatsId.map(id => {
@@ -115,13 +120,11 @@ app.get("/infrared", (req, res) => {
       history.infrared.LOW.push(new Data());
     }
   }
-
   res.sendStatus(200);
 });
 
 app.get("/test", (req, res) => {
-  console.log("New connection: ", req.ip);
-  console.log("Headers: ", req.headers);
+  console.log("Запрос /test, req.ip | req.headers: ", req.ip, req.headers);
   res.sendStatus(200);
 });
 
