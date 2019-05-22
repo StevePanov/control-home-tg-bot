@@ -1,0 +1,130 @@
+var express = require("express");
+var TelegramBot = require("node-telegram-bot-api");
+
+var token = "805688787:AAFcAH_VfGKaET1X04AUMUgKWTdx7MNYX50";
+var bot = new TelegramBot(token, { polling: true });
+var app = express();
+
+var chatsId = [];
+
+var hall = 0; //данные датчика Холла
+var infrared = 0; //данные ИК датчика
+
+var history = {
+  //хранение времени и даты для статистики
+  hall: {
+    HIGH: [],
+    LOW: []
+  },
+  infrared: {
+    HIGH: [],
+    LOW: []
+  }
+};
+
+bot.onText(
+  /\/start/,
+  (onText = msg => {
+    chatsId = Array.from(new Set([...chatsId, msg.chat.id]));
+    chatsId.map(id => {
+      bot.sendMessage(id, "Ты подписался на уведомления");
+    });
+    console.log("chatsId> ", chatsId);
+  })
+);
+
+bot.onText(
+  /\/door/,
+  (onText = msg => {
+    if (req.headers.hall === 1) {
+      chatsId.map(id => {
+        bot.sendMessage(id, "Дверь открыта");
+      });
+    } else {
+      chatsId.map(id => {
+        bot.sendMessage(id, "Дверь закрыта");
+      });
+    }
+  })
+);
+bot.onText(
+  /\/space/,
+  (onText = msg => {
+    if (req.headers.infrared === 1) {
+      chatsId.map(id => {
+        bot.sendMessage(id, "В зоне датчика движение");
+      });
+    } else {
+      chatsId.map(id => {
+        bot.sendMessage(id, "В зоне датчика движение не обнажружено");
+      });
+    }
+  })
+);
+
+bot.onText(
+  /\/stats/,
+  (onText = msg => {
+    chatsId.map(id => {
+      bot.sendMessage(
+        id,
+        `Всего изменений: ${history.hall.HIGH.length +
+          istory.hall.LOW.length +
+          history.infrared.HIGH.length +
+          history.infrared.LOW.length}`
+      );
+    });
+  })
+);
+
+app.get("/hall", (req, res) => {
+  // console.log("Hall:>>>>>>  ", req.headers.hall);
+
+  if (hall != req.headers.hall) {
+    if (req.headers.hall == 1) {
+      chatsId.map(id => {
+        bot.sendMessage(id, "Дверь открыта");
+      });
+      hall = req.headers.hall;
+      history.hall.HIGH.push(new Data());
+    } else {
+      chatsId.map(id => {
+        bot.sendMessage(id, "Дверь закрыта");
+      });
+      hall = req.headers.hall;
+      history.hall.LOW.push(new Data());
+    }
+  }
+  res.sendStatus(200);
+});
+
+app.get("/infrared", (req, res) => {
+  // console.log("IK:>>>>>>  ", req.headers.infrared);
+  if (infrared != req.headers.infrared) {
+    if (req.headers.infrared == 1) {
+      chatsId.map(id => {
+        bot.sendMessage(id, "В зоне датчика движение");
+      });
+      infrared = req.headers.infrared;
+      history.infrared.HIGH.push(new Data());
+    } else {
+      chatsId.map(id => {
+        bot.sendMessage(id, "В зоне датчика движение не обнажружено");
+      });
+      infrared = req.headers.infrared;
+      history.infrared.LOW.push(new Data());
+    }
+  }
+
+  res.sendStatus(200);
+});
+
+app.get("/test", (req, res) => {
+  console.log("New connection: ", req.ip);
+  console.log("Headers: ", req.headers);
+  res.sendStatus(200);
+});
+
+app.listen(3000, () => {
+  console.log("Example app listening on port 3000!");
+});
