@@ -1,7 +1,7 @@
 var express = require("express");
 var TelegramBot = require("node-telegram-bot-api");
 
-var token = "805688787:AAFcAH_VfGKaET1X04AUMUgKWTdx7MNYX50";
+var token = process.env.TG_TOKEN;
 var bot = new TelegramBot(token, { polling: true });
 var app = express();
 
@@ -124,7 +124,7 @@ app.get("/infrared", (req, res) => {
 });
 
 app.get("/test", (req, res) => {
-  console.log("Запрос /test, test:", req.headers.test);
+  console.log("Запрос /test | ", req.headers.test);
   res.sendStatus(200);
 });
 
@@ -132,7 +132,8 @@ app.get("/test", (req, res) => {
 //   console.log("Example app listening on port 3000!");
 // });
 const host = "0.0.0.0";
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 app.listen(port, host, () => {
+  console.log(process.env.TESTVAR);
   console.log("Listening on Port ", port);
 });
