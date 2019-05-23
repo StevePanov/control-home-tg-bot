@@ -83,9 +83,6 @@ bot.onText(
 
 app.get("/hall", (req, res) => {
   console.log("Запрос /hall, req.headers.hall: ", req.headers.hall);
-  console.log("??? DATA---------------     ", new Data());
-  console.log("???      ", history.hall.HIGH.push(new Data()));
-  console.log(">>>> ", history);
 
   if (hall != req.headers.hall) {
     if (req.headers.hall == 0) {
@@ -93,13 +90,13 @@ app.get("/hall", (req, res) => {
         bot.sendMessage(id, "Дверь открыта");
       });
       hall = req.headers.hall;
-      history.hall.HIGH.push(new Data());
+      history.hall.HIGH.push(new Date());
     } else {
       chatsId.map(id => {
         bot.sendMessage(id, "Дверь закрыта");
       });
       hall = req.headers.hall;
-      history.hall.LOW.push(new Data());
+      history.hall.LOW.push(new Date());
     }
   }
   res.sendStatus(200);
@@ -114,13 +111,13 @@ app.get("/infrared", (req, res) => {
         bot.sendMessage(id, "В зоне датчика движение");
       });
       infrared = req.headers.infrared;
-      history.infrared.HIGH.push(new Data());
+      history.infrared.HIGH.push(new Date());
     } else {
       chatsId.map(id => {
         bot.sendMessage(id, "В зоне датчика движение не обнажружено");
       });
       infrared = req.headers.infrared;
-      history.infrared.LOW.push(new Data());
+      history.infrared.LOW.push(new Date());
     }
   }
   res.sendStatus(200);
