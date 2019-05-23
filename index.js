@@ -25,7 +25,7 @@ var history = {
 bot.onText(
   /\/start/,
   (onText = msg => {
-    console.log("/start пришло сообщение, chatsId: ", chatsId);
+    console.log("/start пришло сообщение");
     if (chatsId.indexOf(msg.chat.id) != -1) {
       bot.sendMessage(msg.chat.id, "Вы уже подписаны");
     } else {
