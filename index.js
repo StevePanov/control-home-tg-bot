@@ -90,6 +90,8 @@ app.get("/hall", (req, res) => {
         bot.sendMessage(id, "Дверь открыта");
       });
       hall = req.headers.hall;
+      console.log('???      ', history.hall.HIGH.push(new Data()));
+      console.log('??? DATA---------------     ', new Data());
       history.hall.HIGH.push(new Data());
     } else {
       chatsId.map(id => {
