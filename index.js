@@ -106,13 +106,16 @@ app.get("/infrared", (req, res) => {
   console.log("Запрос /infrared, req.headers.infrared: ", req.headers.infrared);
 
   if (infrared != req.headers.infrared) {
+    console.log("Проверка первого if");
     if (req.headers.infrared == 1) {
+      console.log("Проверка второго if", chatsId, req.headers.infrared);
       chatsId.map(id => {
         bot.sendMessage(id, "В зоне датчика движение");
       });
       infrared = req.headers.infrared;
       history.infrared.HIGH.push(new Data());
     } else {
+      console.log("Проверка второго if", chatsId, req.headers.infrared);
       chatsId.map(id => {
         bot.sendMessage(id, "В зоне датчика движение не обнажружено");
       });
