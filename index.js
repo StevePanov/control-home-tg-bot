@@ -73,7 +73,7 @@ bot.onText(
       bot.sendMessage(
         id,
         `Всего изменений: ${history.hall.HIGH.length +
-          istory.hall.LOW.length +
+          history.hall.LOW.length +
           history.infrared.HIGH.length +
           history.infrared.LOW.length}`
       );
@@ -99,6 +99,7 @@ app.get("/hall", (req, res) => {
       history.hall.LOW.push(new Data());
     }
   }
+  console.log(">>>> ", history);
   res.sendStatus(200);
 });
 
@@ -106,16 +107,13 @@ app.get("/infrared", (req, res) => {
   console.log("Запрос /infrared, req.headers.infrared: ", req.headers.infrared);
 
   if (infrared != req.headers.infrared) {
-    console.log("Проверка первого if");
     if (req.headers.infrared == 1) {
-      console.log("Проверка второго if", chatsId, req.headers.infrared);
       chatsId.map(id => {
         bot.sendMessage(id, "В зоне датчика движение");
       });
       infrared = req.headers.infrared;
       history.infrared.HIGH.push(new Data());
     } else {
-      console.log("Проверка второго if", chatsId, req.headers.infrared);
       chatsId.map(id => {
         bot.sendMessage(id, "В зоне датчика движение не обнажружено");
       });
@@ -123,11 +121,12 @@ app.get("/infrared", (req, res) => {
       history.infrared.LOW.push(new Data());
     }
   }
+  console.log(">>>> ", history);
   res.sendStatus(200);
 });
 
 app.get("/test", (req, res) => {
-  console.log("Запрос /test, req.ip | req.headers: ", req.ip, req.headers);
+  console.log("Запрос /test, test:", req.headers.test);
   res.sendStatus(200);
 });
 
