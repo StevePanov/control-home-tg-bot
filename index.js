@@ -233,15 +233,18 @@ app.get("/temp", (req, res) => {
     req.headers.humidity
   );
 
-  if (temp != req.headers.temp || humidity != req.headers.humidity) {
+  if (
+    Number(temp) != Number(req.headers.temp) ||
+    Number(humidity) != Number(req.headers.humidity)
+  ) {
     temp = req.headers.temp;
     humidity = req.headers.humidity;
-    if (req.headers.temp < 15) {
+    if (Number(req.headers.temp) < 15) {
       chatsId.map(id => {
         bot.sendMessage(id, `Низкая температура: ${req.headers.temp} градусов`);
       });
     }
-    if (req.headers.humidity > 70) {
+    if (Number(req.headers.humidity) > 70) {
       chatsId.map(id => {
         bot.sendMessage(id, `Повышенная влажность: ${req.headers.temp}%`);
       });
