@@ -229,8 +229,10 @@ app.get("/mq4", (req, res) => {
 app.get("/temp", (req, res) => {
   console.log(
     "Запрос /temp, req.headers.temp & humidity: ",
-    req.headers.temp,
-    req.headers.humidity
+    typeof req.headers.temp,
+    typeof req.headers.humidity,
+    temp,
+    Number(req.headers.temp)
   );
 
   if (
