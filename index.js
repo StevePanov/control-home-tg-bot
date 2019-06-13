@@ -11,6 +11,8 @@ var hall = 1; //данные датчика Холла
 var infrared = 0; //данные ИК датчика
 var mq2 = 0; //данные mq2
 var mq4 = 0; //данные mq4
+var temp = 0;
+var humidity = 0;
 
 var history = {
   //хранение времени и даты для статистики
@@ -235,10 +237,7 @@ app.get("/temp", (req, res) => {
     Number(req.headers.temp)
   );
 
-  if (
-    Number(temp) != Number(req.headers.temp) ||
-    Number(humidity) != Number(req.headers.humidity)
-  ) {
+  if (temp != req.headers.temp || humidity != req.headers.humidity) {
     temp = req.headers.temp;
     humidity = req.headers.humidity;
     if (Number(req.headers.temp) < 15) {
